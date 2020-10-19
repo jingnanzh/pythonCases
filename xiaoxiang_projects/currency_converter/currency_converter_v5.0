@@ -1,0 +1,44 @@
+'''
+作者；jing
+日期：2020-08-011
+新增功能:函数， 使程序结构化
+'''
+
+# def convert_currency(im, er):
+#     out = im * er
+#     return out
+
+def main():
+
+    # 汇率，常量：
+    USD_VS_RMB = 6.77
+
+    # 输入货币, 变量
+    currency_str_value = input('输入带货币单位的金额（退出请输入Q):')
+
+
+    # 获取货币单位：
+    units = currency_str_value[-3:]
+
+    if units == 'CNY':
+        exchange_rate =  1/USD_VS_RMB
+
+
+    elif units == 'USD':
+        exchange_rate =  USD_VS_RMB
+
+    else:
+        exchange_rate = -1
+
+    if exchange_rate != -1:
+        in_money = eval(currency_str_value[:-3])
+        convert_currancy = lambda x: x * exchange_rate
+        out_money = convert_currancy(in_money)
+        print("得到货币：", out_money)
+    else:
+        print('不支持该币种')
+
+    print('程序退出')
+
+if __name__== '__main__':
+    main()

@@ -1,0 +1,51 @@
+'''
+    52周存钱挑战
+    日期：2020-08-14
+    作者： jing
+    添加记录
+    增加灵活功能，用户可以随意增减存钱数额
+
+'''
+import math
+# 全局变量global
+saving = 0
+
+def save_money_in_n_weeks(money_per_week,increase_money,total_week):
+    '''
+        计算N周的存款额
+    '''
+    global saving
+    money_list = []  # 记录每周存款
+    # while i <= total_week:
+    # 把while用for替代：
+    # range 从0开始计数
+    for i in range(total_week):
+        # #存钱
+        # saving += money_per_week
+        money_list.append(money_per_week)
+        saving = math.fsum(money_list)
+
+        # 输出
+        print('第{}周存入{}元，账户累计{}元'.
+              format(i + 1, money_per_week, saving))
+        # 更新下周的存钱金额
+        money_per_week += increase_money
+
+    print('saving',saving)
+    return saving #return 把两个函数链接起来了
+
+
+
+def main():
+    money_per_week = float(input('每周存入的钱数: '))      #每周存入的钱数
+    increase_money = float(input('每周递增: '))           #每周递增
+    total_week = int(input('总周数: '))                   #总周数
+
+    #局部变量， 作用范围在函数内：
+    saving = 0
+
+    saving = save_money_in_n_weeks(money_per_week, increase_money, total_week)
+    print('函数内saving', saving)
+
+if __name__=='__main__':
+    main()

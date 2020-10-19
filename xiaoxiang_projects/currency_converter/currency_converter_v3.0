@@ -1,0 +1,39 @@
+'''
+作者；jing
+日期：2020-08-011
+新增功能:循环语句，程序一直运行直到用户选择退出
+'''
+# 汇率，常量：
+rmb_vs_usd = 6.77
+
+# 输入货币, 变量
+currency_str_value = input('输入带货币单位的金额（退出请输入Q):')
+
+i=0
+
+while currency_str_value != 'Q':
+    i +=1
+    print('循环次数： ', i)
+    # 获取货币单位：
+    units = currency_str_value[-3:]
+
+    if units == 'CNY':
+        # 拿到人民币金额的string
+        rmb_str_value = currency_str_value[0:-3]
+        # 字符串转为数字：
+        rmb_value = eval(rmb_str_value)
+        # 转换为美元：
+        usd_value = rmb_value / rmb_vs_usd
+        print('美元：', usd_value)
+    elif units == 'USD':
+        usd_str_value = currency_str_value[0:-3]
+        usd_value = eval(usd_str_value)
+        rmb_value = usd_value * rmb_vs_usd
+        print('人民币：', rmb_value)
+    else:
+        print('不支持其他货币，请输入人民币CNY或者美元')
+    print('******************************************************')
+    # 输入货币, 变量
+    currency_str_value = input('输入带货币单位的金额（退出请输入Q):')
+
+print('程序退出')

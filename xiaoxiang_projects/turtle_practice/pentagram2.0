@@ -1,0 +1,38 @@
+'''
+作者：jing
+日期：2020-08-12
+功能：绘制多个五角星
+'''
+import turtle
+
+def draw_pentagram(size):
+    '''
+    # 绘制一个五角星
+    '''
+    count = 1
+    while count <= 5:
+        turtle.forward(size)
+        turtle.right(144)
+        count += 1
+
+def main(size):
+    '''
+    主函数
+    '''
+    #向左移动,改变粗细和颜色
+    turtle.penup()
+    turtle.backward(200)
+    turtle.pendown()
+    turtle.pensize(2)
+    turtle.pencolor(red)
+
+    size = 50
+
+    while size <= 100:
+        draw_pentagram(size)
+        size += 10
+
+    turtle.exitonclick()
+
+if __name__=='main':
+    main()

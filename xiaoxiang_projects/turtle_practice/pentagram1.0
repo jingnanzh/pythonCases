@@ -1,0 +1,21 @@
+'''
+作者：jing
+日期：2020-08-12
+功能：五角星
+'''
+import turtle
+
+def main():
+    '''
+    主函数
+    '''
+    #第一条边
+    count=1
+    while count<=5:
+        turtle.forward(150)
+        turtle.right(144)
+        count +=1
+
+    turtle.exitonclick()
+if __name__=='main':
+    main()

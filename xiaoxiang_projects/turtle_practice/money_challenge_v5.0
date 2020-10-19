@@ -1,0 +1,55 @@
+'''
+    52周存钱挑战
+    日期：2020-08-14
+    作者： jing
+    添加记录
+    增加灵活功能，用户可以随意增减存钱数额
+
+'''
+import math
+import datetime
+
+# 全局变量global
+saving = 0
+
+def save_money_in_n_weeks(money_per_week,increase_money,total_week):
+    '''
+        计算N周的存款额
+    '''
+    global saving
+    money_list = []         # 记录每周存款
+    saved_money_list=[]     # 记录每周累计存款
+
+    for i in range(total_week):
+
+        money_list.append(money_per_week)
+        saving = math.fsum(money_list)
+        saved_money_list.append(saving)
+
+        # 输出
+        print('第{}周存入{}元，账户累计{}元'.
+              format(i + 1, money_per_week, saving))
+        # 更新下周的存钱金额
+        money_per_week += increase_money
+
+    print('saving',saving)
+    return saved_money_list
+
+
+
+def main():
+    money_per_week = float(input('每周存入的钱数: '))      #每周存入的钱数
+    increase_money = float(input('每周递增: '))           #每周递增
+    total_week = int(input('总周数: '))                   #总周数
+
+    #局部变量， 作用范围在函数内：
+    saving = 0
+
+    saved_money_list = save_money_in_n_weeks(money_per_week, increase_money, total_week)
+    inquiry_date_string = input('请输入查询日期 (yyyy/mm/dd)：')
+    inquiry_date = datetime.datetime.strptime(inquiry_date_string, '%Y/%m/%d')
+    week_number = inquiry_date.isocalendar()[1]
+    print('第{}星期的总存款是：{}'.format(week_number,saved_money_list[week_number-1]))
+
+if __name__=='__main__':
+    main()

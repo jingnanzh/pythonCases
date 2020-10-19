@@ -1,0 +1,32 @@
+'''
+    52周存钱挑战
+    日期：2020-08-14
+    作者： jing
+    添加记录
+'''
+import math
+
+def main():
+    money_per_week = 10 #每周存入的钱数
+    # i= 1                #记录周数
+    increase_money = 10 #每周递增
+    total_week = 52     #总周数
+    # saving = 0          #账户累计
+    money_list = []     #记录每周存款
+    # while i <= total_week:
+    # 把while用for替代：
+    # range 从0开始计数
+    for i in range(total_week):
+        # #存钱
+        # saving += money_per_week
+        money_list.append(money_per_week)
+        saving = math.fsum(money_list)
+
+        # 输出
+        print('第{}周存入{}元，账户累计{}元'.
+              format(i+1, money_per_week,saving))
+        # 更新下周的存钱金额
+        money_per_week += increase_money
+        i += 1
+if __name__=='__main__':
+    main()
