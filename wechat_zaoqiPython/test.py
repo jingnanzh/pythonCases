@@ -1,7 +1,10 @@
 import requests
 from bs4 import BeautifulSoup
 import csv
+import random
 import pandas as pd
+
+total_time = 1000
 
 url = 'https://www.bilibili.com/v/popular/rank/all?spm_id_from=333.851.b_7072696d61727950616765546162.3'
 res = requests.get(url)
