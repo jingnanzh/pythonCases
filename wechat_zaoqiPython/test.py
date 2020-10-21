@@ -3,12 +3,6 @@ from bs4 import BeautifulSoup
 import csv
 import pandas as pd
 
-<<<<<<< HEAD
-test = 2
-=======
-total_time = 1000
->>>>>>> 697a5149cf29f1a96e4a2db0f4714d01f6cdfc2a
-
 url = 'https://www.bilibili.com/v/popular/rank/all?spm_id_from=333.851.b_7072696d61727950616765546162.3'
 res = requests.get(url)
 print(res.text)
