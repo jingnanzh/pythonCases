@@ -1,7 +1,6 @@
 import requests
 from bs4 import BeautifulSoup
 import csv
-import random
 import pandas as pd
 
 total_time = 1000
