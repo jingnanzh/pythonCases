@@ -22,10 +22,12 @@ print(head)
 print(df.shape)
 print(df.info()) #可以看到商品名称，店铺名称，价格，付款数量以及地点这五个字段都对应有4044个非空的数据
 
+# 计算缺失率
+print(df.apply(lambda x:sum(x.isnull())/len(x)) )     #结果显示没有缺失的数据，全部为0.0
 
 # 去除重复值
 df.drop_duplicates(inplace=True)
-print(df.shape)
+print(df.shape)    #result: 3411 entries left
 
 # 删除购买人数为空的记录
 df = df[df['付款人数'].str.contains('人付款')]
@@ -139,4 +141,102 @@ def get_cut_words(content_series):
     word_num_selected = [i for i in word_num if i not in stop_words and len(i)>=2]
     return word_num_selected
 text = get_cut_words(content_series=df['商品名称'])
-text[:5]
+print(text[:5])
+
+import stylecloud
+from IPython.display import Image # 用于在jupyter lab中显示本地图片
+# 绘制词云图
+stylecloud.gen_stylecloud(text=' '.join(text),
+                          collocations=False,
+                          font_path ='c:\\windows\\fonts\\simsun.ttc',   #显示中文需要的font
+                          icon_name='fas fa-heart',
+                          size=768,
+                          output_name='淘宝乐高标题词云图.png')
+# 天猫旗舰店数据分析
+# 读取数据：
+df_tm = pd.read_excel('C:/Users/Maggie/Desktop/Udemy-desktop/xiaoxiangxueyuan/Python认知打卡课课程资料包/资料代码整理/数据分析/解读乐高/数据/天猫乐高旗舰店数据.xlsx')
+df_tm.head()
+
+df_tm.info()
+
+#drop 重复值
+df_tm.drop_duplicates(inplace=True)
+
+# 价格处理
+def tranform_price(x):
+    if '-' in x:
+        return (float(x.split('-')[1]) - float(x.split('-')[0]))/2
+    else:
+        return x
+    
+# 价格转换
+df_tm['价格'] = df_tm.价格.apply(lambda x: tranform_price(x)).astype('float')
+# 使用平均值填充缺失值
+df_tm['销量'] = df_tm.销量.replace('无', 200)
+# 转换类型
+df_tm['销量'] = df_tm.销量.astype('int')
+print(df_tm.head())
+
+# 标题去除-乐高旗舰店和官网
+df_tm['名称'] = df_tm.名称.str.replace('乐高旗舰店|官网|2020年', '')
+
+# 销售额
+df_tm['销售额'] = df_tm['销量'] * df_tm['价格']
+print(df_tm.head())
+
+# 按销量从高到低排序，得到Top10商品：
+rank_top10 = df_tm.sort_values('销量', ascending=False).head(10)[['名称', '销量']]
+rank_top10 = rank_top10.sort_values('销量')
+rank_top10
+
+# 结果绘制为柱形图
+x_data = rank_top10.名称.values.tolist()
+y_data = rank_top10.销量.values.tolist()
+# 柱形图
+bar1 = Bar(init_opts=opts.InitOpts(width='1350px', height='750px'))
+bar1.add_xaxis(x_data)
+bar1.add_yaxis('', y_data)
+bar1.set_global_opts(title_opts=opts.TitleOpts(title='乐高旗舰店月销量排名Top10商品'),
+                     visualmap_opts=opts.VisualMapOpts(max_=5000)
+                    )
+bar1.set_series_opts(label_opts=opts.LabelOpts(position='right'))
+bar1.reversal_axis()
+bar1.render()
+
+# 乐高旗舰店不同价格区间商品数量
+# 分箱
+cut_bins = [0,200,400,600,800,1000,2000,9469]
+cut_labels = ['0~50元', '50~100元', '100~200元', '200~300元', '300~500元', '500~1000元', '1000元以上']
+price_cut = pd.cut(df['价格'], bins=cut_bins, labels=cut_labels)
+price_num = price_cut.value_counts()
+
+
+# 再上一个柱形图～
+bar2 = Bar(init_opts=opts.InitOpts(width='1350px', height='750px'))
+bar2.add_xaxis(['0~50元', '50~100元', '100~200元', '200~300元', '300~500元', '500~1000元', '1000元以上'])
+bar2.add_yaxis('',[2082, 495, 290, 200, 84, 144, 116])
+bar2.set_global_opts(title_opts=opts.TitleOpts(title='乐高旗舰店不同价格区间商品数量'),
+                     visualmap_opts=opts.VisualMapOpts(max_=2000))
+bar2.render()
+
+# 乐高旗舰店不同价格区间销售额表现
+# 添加列
+df_tm['价格标签'] = price_cut
+cut_purchase = df_tm.groupby('价格标签')['销售额'].sum()
+
+# 将结果绘制为饼图：
+
+data_pair =  [list(z) for z in zip(cut_purchase.index.tolist(), cut_purchase.values.tolist())]
+# 绘制饼图
+pie1 = Pie(init_opts=opts.InitOpts(width='1350px', height='750px'))
+pie1.add('', data_pair, radius=['35%', '60%'])
+pie1.set_global_opts(title_opts=opts.TitleOpts(title='不同价格区间的销售额整体表现'),
+                     legend_opts=opts.LegendOpts(orient='vertical', pos_top='15%', pos_left='2%'))
+pie1.set_series_opts(label_opts=opts.LabelOpts(formatter="{b}:{d}%"))
+pie1.set_colors(['#EF9050', '#3B7BA9', '#6FB27C', '#FFAF34', '#D8BFD8', '#00BFFF', '#7FFFAA'])
+pie1.render()
+
+# 生成page
+page2 = Page()
+page2.add(bar1, bar2, pie1)
+page2.render('乐高天猫旗舰店数据分析.html')
