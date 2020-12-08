@@ -73,7 +73,7 @@ print(contents)
 # 照例导入邮件处理模块，以contents为内容发送邮件给女盆友就大功告成！
 import zmail
 # 使用邮件账户名和密码登录服务器
-server = zmail.server('kunpengxu2020@gmail.com', 'Peng951026!')
+server = zmail.server('xiaoxiang@gmail.com', '？？')
 mail = {
     'subject': '睡前小故事',  # 邮件的标题
     'content_text': contents,  # 邮件的文字内容
